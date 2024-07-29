@@ -3,9 +3,10 @@
 **Run cve_sercher**
 Posible program parameters:
   
-  --use-config : use w/o other parameters. All parameters with "use_config" from config file
+  --use-config : use w/o other parameters. All parameters with "use_config" from config file.
   
   --cve-name
+  
   --cve-assigner
   --cve-publish-date
   --cve-publish-date-year
