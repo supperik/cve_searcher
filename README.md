@@ -25,7 +25,7 @@ Posible program parameters:
   --cpe-product-runtime\
   --cpe-product-other
 
-  parser.add_argument('--cwe-name')
+  --cwe-name
 
-  parser.add_argument('--cvssv2-score')\
-  parser.add_argument('--cvssv3-score')
+  --cvssv2-score\
+  --cvssv3-score
