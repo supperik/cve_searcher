@@ -10,7 +10,7 @@ Posible program parameters:
   --cve-publish-date\
   --cve-publish-date-year\
   --cve-publish-date-month\
-  --cve-publish-date-day\
+  --cve-publish-date-day
 
   --cpe-uri\
   --cpe-version\
@@ -23,4 +23,9 @@ Posible program parameters:
   --cpe-product-language\
   --cpe-product-platform\
   --cpe-product-runtime\
-  --cpe-product-other\
+  --cpe-product-other
+
+  parser.add_argument('--cwe-name')
+
+  parser.add_argument('--cvssv2-score')\
+  parser.add_argument('--cvssv3-score')
