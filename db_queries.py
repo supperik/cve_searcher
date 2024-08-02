@@ -1,3 +1,6 @@
+from configs.config import query_dict
+
+
 def build_query(args):
     base_query = """
     SELECT
@@ -35,8 +38,8 @@ def build_query(args):
         CVSSV3.BASE_SEVERITY AS CVSSV3_BASE_SEVERITY,
         CVSSV3.IMPACT_SCORE AS CVSSV3_IMPACT_SCORE,
         CVSSV3.EXPLOITABILITY_SCORE AS CVSSV3_EXPLOITABILITY_SCORE,
-        REFERENCE.URL AS REFERENCE_URL,
-        REFERENCE.NAME AS REFERENCE_NAME,
+        REFERENCE.URL AS REFERENCE_URLS,
+        REFERENCE.NAME AS REFERENCE_NAMES,
         CPE.CPE_URI AS CPE_URI,
         CPE.CPE_VERSION AS CPE_VERSION,
         CPE.CPE_PART AS CPE_PART,
@@ -54,7 +57,7 @@ def build_query(args):
         CAPEC.CAPEC_NAME AS CAPEC_NAME,
         CAPEC.ABSTRACTION AS CAPEC_ABSTRACTION,
         CAPEC.STATUS AS CAPEC_STATUS,
-        CAPEC.DECRIPTION AS CAPEC_DESCRIPTION,
+        CAPEC.DESCRIPTION AS CAPEC_DESCRIPTION,
         CAPEC.LIKELIHOOD AS CAPEC_LIKELIHOOD,
         CAPEC.RELATED_ATTACK_PATTERN AS CAPEC_RELATED_ATTACK_PATTERN,
         CAPEC.EXECUTION_FLOW AS CAPEC_EXECUTION_FLOW,
@@ -82,73 +85,31 @@ def build_query(args):
 
     conditions = []
     parameters = []
+    selected_cols = []
 
-    if args.cve_name:
-        conditions.append("CVE.CVE_NAME = ?")
-        parameters.append(args.cve_name)
-    if args.cve_assigner:
-        conditions.append("CVE.ASSIGNER = ?")
-        parameters.append(args.cve_assigner)
-    if args.cve_publish_date:
-        conditions.append("CVE.PUBLISH_DATE = ?")
-        parameters.append(args.cve_publish_date)
-    if args.cve_publish_date_year:
-        conditions.append("strftime('%Y', CVE.PUBLISH_DATE) = ?")
-        parameters.append(args.cve_publish_date_year)
-    if args.cve_publish_date_month:
-        conditions.append("strftime('%m', CVE.PUBLISH_DATE) = ?")
-        parameters.append(args.cve_publish_date_month)
-    if args.cve_publish_date_day:
-        conditions.append("strftime('%d', CVE.PUBLISH_DATE) = ?")
-        parameters.append(args.cve_publish_date_day)
-    if args.cpe_uri:
-        conditions.append("CPE.CPE_URI = ?")
-        parameters.append(args.cpe_uri)
-    if args.cpe_version:
-        conditions.append("CPE.CPE_VERSION = ?")
-        parameters.append(args.cpe_version)
-    if args.cpe_part:
-        conditions.append("CPE.CPE_PART = ?")
-        parameters.append(args.cpe_part)
-    if args.cpe_vendor:
-        conditions.append("CPE.CPE_VENDOR = ?")
-        parameters.append(args.cpe_vendor)
-    if args.cpe_product:
-        conditions.append("CPE.CPE_PRODUCT = ?")
-        parameters.append(args.cpe_product)
-    if args.cpe_product_version:
-        conditions.append("CPE.CPE_PRODUCT_VERSION = ?")
-        parameters.append(args.cpe_product_version)
-    if args.cpe_product_update:
-        conditions.append("CPE.CPE_PRODUCT_UPDATE = ?")
-        parameters.append(args.cpe_product_update)
-    if args.cpe_product_edition:
-        conditions.append("CPE.CPE_PRODUCT_EDITION = ?")
-        parameters.append(args.cpe_product_edition)
-    if args.cpe_product_language:
-        conditions.append("CPE.CPE_PRODUCT_LANGUAGE = ?")
-        parameters.append(args.cpe_product_language)
-    if args.cpe_product_platform:
-        conditions.append("CPE.CPE_PRODUCT_PLATFORM = ?")
-        parameters.append(args.cpe_product_platform)
-    if args.cpe_product_runtime:
-        conditions.append("CPE.CPE_PRODUCT_RUNTIME = ?")
-        parameters.append(args.cpe_product_runtime)
-    if args.cpe_product_other:
-        conditions.append("CPE.CPE_PRODUCT_OTHER = ?")
-        parameters.append(args.cpe_product_other)
-    if args.cwe_name:
-        conditions.append("CWE.CWE_NAME = ?")
-        parameters.append(args.cwe_name)
-    if args.cvssv2_score:
-        conditions.append("CVSSV2.BASE_SCORE = ?")
-        parameters.append(args.cvssv2_score)
-    if args.cvssv3_score:
-        conditions.append("CVSSV3.BASE_SCORE = ?")
-        parameters.append(args.cvssv3_score)
+    def add_parameter(arg: str):
+        arg = arg.split(';')
+        try:
+            for item in arg:
+                parameters.append(float(item))
+        except ValueError:
+            for item in arg:
+                parameters.append(item)
+
+    def add_condition(arg: str):
+        conditions.append(f"{query_dict[arg][0]} IN (" + ",".join(["?"] * len(arg.split(';'))) + ")")
+
+    def add_selected_col(arg: str):
+        selected_cols.append(query_dict[arg][1] + ': ')
+
+    for dict_key in query_dict:
+        if query_dict[dict_key]:
+            add_condition(dict_key)
+            add_parameter(dict_key)
+            add_selected_col(dict_key)
 
     if not conditions:
         raise ValueError("Необходимо указать хотя бы один параметр для поиска.")
 
-    query = base_query + " AND ".join(conditions)
+    query = base_query + " AND ".join(conditions) + "ORDER BY CVE.CVE_ID"
     return query, parameters

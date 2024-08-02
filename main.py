@@ -1,22 +1,30 @@
-from config import *
+import sqlite3
+
+from utils.redirect_output import redirect_output
+from utils.print_query_result import print_query_result
+from utils.get_execution_file_dir import get_execution_file_dir
+from utils.merge_different_records_in_same_column_in_list import merge_different_records_in_same_column_in_list
 from arg_parser import arg_parse
 from db_queries import build_query
-import sqlite3
+from configs.config import database_name
 
 
 def main():
     args = arg_parse()
 
-    conn = sqlite3.connect('cve_database.db')
+    execution_file_dir = get_execution_file_dir(__file__)
+
+    conn = sqlite3.connect(execution_file_dir + '\\' + database_name)
     cursor = conn.cursor()
 
     query, parameters = build_query(args)
-
     cursor.execute(query, parameters)
-    results = cursor.fetchall()
+    results = list(set(cursor.fetchall()))
 
-    for row in results:
-        print(row)
+    merged_results = merge_different_records_in_same_column_in_list(results)
+
+    output_file = redirect_output()
+    print_query_result(merged_results, output_file)
 
     conn.close()
 

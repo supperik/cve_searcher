@@ -1,4 +1,0 @@
--- SELECT_CVE_ID_BY_CVE_PUBLISH_DATE_YEAR
-SELECT CVE_ID
-FROM CVE
-WHERE strftime('%Y', PUBLISH_DATE) = ?; -- формат года должен быть 'YYYY'
