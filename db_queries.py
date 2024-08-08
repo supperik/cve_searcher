@@ -1,7 +1,7 @@
 from configs.config import query_dict
 
 
-def build_query(args):
+def build_query():
     base_query = """
     SELECT
         CVE.CVE_ID,
@@ -49,8 +49,9 @@ def build_query(args):
         CPE.CPE_PRODUCT_UPDATE AS CPE_PRODUCT_UPDATE,
         CPE.CPE_PRODUCT_EDITION AS CPE_PRODUCT_EDITION,
         CPE.CPE_PRODUCT_LANGUAGE AS CPE_PRODUCT_LANGUAGE,
-        CPE.CPE_PRODUCT_PLATFORM AS CPE_PRODUCT_PLATFORM,
-        CPE.CPE_PRODUCT_RUNTIME AS CPE_PRODUCT_RUNTIME,
+        CPE.CPE_SW_EDITION AS CPE_SW_EDITION,
+        CPE.CPE_TARGET_SW AS CPE_TARGET_SW,
+        CPE.CPE_TARGET_HW AS CPE_TARGET_HW,
         CPE.CPE_PRODUCT_OTHER AS CPE_PRODUCT_OTHER,
         CWE.CWE_NAME AS CWE_NAME,
         CWE.DESCRIPTION AS CWE_DESCRIPTION,
@@ -111,5 +112,5 @@ def build_query(args):
     if not conditions:
         raise ValueError("Необходимо указать хотя бы один параметр для поиска.")
 
-    query = base_query + " AND ".join(conditions) + "ORDER BY CVE.CVE_ID"
+    query = base_query + " AND ".join(conditions) + " ORDER BY CVE.CVE_ID"
     return query, parameters

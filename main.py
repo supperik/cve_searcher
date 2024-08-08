@@ -1,6 +1,7 @@
 import sqlite3
 
 from utils.redirect_output import redirect_output
+from utils.redirect_input import redirect_input
 from utils.print_query_result import print_query_result
 from utils.get_execution_file_dir import get_execution_file_dir
 from utils.merge_different_records_in_same_column_in_list import merge_different_records_in_same_column_in_list
@@ -17,7 +18,8 @@ def main():
     conn = sqlite3.connect(execution_file_dir + '\\' + database_name)
     cursor = conn.cursor()
 
-    query, parameters = build_query(args)
+    redirect_input()
+    query, parameters = build_query()
     cursor.execute(query, parameters)
     results = list(set(cursor.fetchall()))
 
