@@ -1,7 +1,7 @@
 from configs.config import query_dict
 
 
-def build_query():
+def build_query(cursor, parameters: list):
     base_query = """
     SELECT
         CVE.CVE_ID,
@@ -82,35 +82,7 @@ def build_query():
         LEFT JOIN CAPEC_has_CWE ON CWE.CWE_ID = CAPEC_has_CWE.CWE_ID
         LEFT JOIN CAPEC ON CAPEC_has_CWE.CAPEC_ID = CAPEC.CAPEC_ID
     WHERE
+        CVE.CVE_ID = ?
     """
 
-    conditions = []
-    parameters = []
-    selected_cols = []
-
-    def add_parameter(arg: str):
-        arg = arg.split(';')
-        try:
-            for item in arg:
-                parameters.append(float(item))
-        except ValueError:
-            for item in arg:
-                parameters.append(item)
-
-    def add_condition(arg: str):
-        conditions.append(f"{query_dict[arg][0]} IN (" + ",".join(["?"] * len(arg.split(';'))) + ")")
-
-    def add_selected_col(arg: str):
-        selected_cols.append(query_dict[arg][1] + ': ')
-
-    for dict_key in query_dict:
-        if query_dict[dict_key]:
-            add_condition(dict_key)
-            add_parameter(dict_key)
-            add_selected_col(dict_key)
-
-    if not conditions:
-        raise ValueError("Необходимо указать хотя бы один параметр для поиска.")
-
-    query = base_query + " AND ".join(conditions) + " ORDER BY CVE.CVE_ID"
-    return query, parameters
+    cursor.execute(base_query, parameters)

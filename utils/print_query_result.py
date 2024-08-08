@@ -19,20 +19,20 @@ def print_query_result(result, file):
                         if isinstance(result[i][j][k], str) and result[i][j][k] != "None":
                             result[i][j][k] = json.loads(result[i][j][k])
 
-                        # print('-' * 40, file=file)
+                        print('-' * 40, file=file)
                         print(f"{str_list[j]}_{k + 1}: ", end='\n', file=file)
                         pprint.pprint(result[i][j][k], stream=file)
                 continue
 
             if isinstance(result[i][j], list):
                 for k in range(len(result[i][j])):
-                    # print('-' * 40, file=file)
+                    print('-' * 40, file=file)
                     print(f"{str_list[j]}_{k + 1}: {result[i][j][k]}", file=file)
                 continue
 
-            # print('-' * 40, file=file)
+            print('-' * 40, file=file)
             print(f"{str_list[j]}: {result[i][j]}", file=file)
-        # print('-' * 40, file=file)
+        print('-' * 40, file=file)
         print('\n', file=file)
     file.close()
 

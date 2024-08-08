@@ -15,5 +15,4 @@ def redirect_input():
 
 def read_input_json_file(file):
     input_dict = json.load(file)
-
     fill_query_dict(input_dict)

@@ -41,7 +41,10 @@ def arg_parse():
 
     # Parse arguments
     args = parser.parse_args()
+    return args
 
+
+def process_args(args):
     if args.use_input_file:
         conf.config_dict['use_input_file'] = args.use_input_file
 

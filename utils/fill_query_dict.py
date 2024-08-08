@@ -1,13 +1,11 @@
-from configs.config import query_dict
+from configs.config import query_dict, config_dict
 
 
 def fill_query_dict(input_dict):
-    print(input_dict)
     if 'cve_name' in input_dict and input_dict['cve_name'] is not None:
         query_dict[';'.join(input_dict['cve_name'])] = ["CVE.CVE_NAME", "CVE Name"]
 
     if 'cve_assigner' in input_dict and input_dict['cve_assigner'] is not None:
-        print('123123')
         query_dict[';'.join(input_dict['cve_assigner'])] = ["CVE.ASSIGNER", "CVE Assigner"]
 
     if 'cve_publish_date' in input_dict and input_dict['cve_publish_date'] is not None:
