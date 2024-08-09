@@ -82,7 +82,12 @@ def build_query(cursor, parameters: list):
         LEFT JOIN CAPEC_has_CWE ON CWE.CWE_ID = CAPEC_has_CWE.CWE_ID
         LEFT JOIN CAPEC ON CAPEC_has_CWE.CAPEC_ID = CAPEC.CAPEC_ID
     WHERE
-        CVE.CVE_ID = ?
     """
 
-    cursor.execute(base_query, parameters)
+    conditions = list()
+
+    conditions.append(f"CVE.CVE_ID IN (" + ",".join(["?"] * len(parameters)) + ")")
+
+    query = base_query + " AND ".join(conditions) + " ORDER BY CVE.CVE_ID"
+
+    cursor.execute(query, parameters)

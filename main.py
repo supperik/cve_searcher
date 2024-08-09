@@ -23,10 +23,11 @@ def main():
 
     redirect_input()
     cve_id_list = get_cve_id(cursor)
-    build_query(cursor, cve_id_list)
-    results = list(set(cursor.fetchall()))
 
-    merged_results = merge_different_records_in_same_column_in_list(results)
+    build_query(cursor, cve_id_list)
+
+    merged_results = merge_different_records_in_same_column_in_list(list(set(cursor.fetchall())))
+    merged_results.sort(key=lambda i: i[1])
 
     output_file = redirect_output()
     print_query_result(merged_results, output_file)
@@ -36,3 +37,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

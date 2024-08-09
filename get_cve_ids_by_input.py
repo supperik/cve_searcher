@@ -58,5 +58,4 @@ def get_cve_id(cursor):
 
     merged_results = merge_different_records_in_same_column_in_list(result)
     merged_results = [item[0] for item in merged_results]
-    print(merged_results)
     return merged_results
