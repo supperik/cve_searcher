@@ -5,7 +5,7 @@ from utils.redirect_output import redirect_output
 from utils.redirect_input import redirect_input
 from utils.print_query_result import print_query_result
 from utils.get_execution_file_dir import get_execution_file_dir
-from utils.merge_different_records_in_same_column_in_list import merge_different_records_in_same_column_in_list
+from utils.merge_different_records_by_same_column_in_list import merge_different_records_in_same_column_in_list
 from arg_parser import arg_parse, process_args
 from db_queries import build_query
 from configs.config import database_name
@@ -37,4 +37,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

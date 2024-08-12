@@ -1,5 +1,5 @@
 from configs.config import query_dict
-from utils.merge_different_records_in_same_column_in_list import merge_different_records_in_same_column_in_list
+from utils.merge_different_records_by_same_column_in_list import merge_different_records_in_same_column_in_list
 
 
 def get_cve_id(cursor):
