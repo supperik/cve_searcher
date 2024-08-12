@@ -61,3 +61,6 @@ def fill_query_dict(input_dict):
 
     if 'use_output_file' in input_dict and input_dict['use_output_file'] is not None:
         config_dict['use_output_file'] = input_dict['use_output_file']
+
+    if 'db_path' in input_dict and input_dict['db_path'] is not None:
+        config_dict['db_path'] = input_dict['db_path']

@@ -11,6 +11,7 @@ def arg_parse():
 
     parser.add_argument('--use-output-file', type=str)
     parser.add_argument('--use-input-file', type=str)
+    parser.add_argument('--db-path', type=str)
 
     # Arguments for cve
     parser.add_argument('--cve-name', nargs='+', type=str)
